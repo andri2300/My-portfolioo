@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confusion Matrix</title>
+<style>
+    /* CSS styling */
+    table {
+        border-collapse: collapse;
+        width: 50%;
+        margin: 20px auto;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+<h2>Confusion Matrix</h2>
+<table id="confusionMatrix">
+    <tr>
+        <th></th>
+        <th>Predicted Positive</th>
+        <th>Predicted Negative</th>
+    </tr>
+    <tr>
+        <td>Actual Positive</td>
+        <td><input type="number" id="tp"></td>
+        <td><input type="number" id="fn"></td>
+    </tr>
+    <tr>
+        <td>Actual Negative</td>
+        <td><input type="number" id="fp"></td>
+        <td><input type="number" id="tn"></td>
+    </tr>
+</table>
+
+<button onclick="calculateMetrics()">Calculate Metrics</button>
+
+<h2>Metrics</h2>
+<p id="precision"></p>
+<p id="recall"></p>
+<p id="accuracy"></p>
+
+<script>
+    // JavaScript code
+    function calculateMetrics() {
+        const tp = parseInt(document.getElementById('tp').value);
+        const fn = parseInt(document.getElementById('fn').value);
+        const fp = parseInt(document.getElementById('fp').value);
+        const tn = parseInt(document.getElementById('tn').value);
+
+        const precision = tp / (tp + fp);
+        const recall = tp / (tp + fn);
+        const accuracy = (tp + tn) / (tp + tn + fp + fn);
+
+        document.getElementById('precision').innerText = `Precision: ${precision.toFixed(2)}`;
+        document.getElementById('recall').innerText = `Recall: ${recall.toFixed(2)}`;
+        document.getElementById('accuracy').innerText = `Accuracy: ${accuracy.toFixed(2)}`;
+    }
+</script>
+</body>
+</html>

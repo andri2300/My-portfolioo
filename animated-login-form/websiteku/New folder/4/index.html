@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Penentuan Jurusan IPA/IPS/Bahasa dengan K-Medoids</title>
+</head>
+<body>
+  <h2>Data Siswa</h2>
+  <textarea id="siswaData" rows="20" cols="50">
+Nama Siswa, Nilai IPA, Nilai IPS, Nilai Bahasa
+Siswa A , 50, 60, 70
+Siswa B , 65, 80, 73
+Siswa C , 72, 70, 65
+...
+Siswa T , 77, 71, 55
+  </textarea>
+  <br>
+  <button onclick="tentukanJurusan()">Tentukan Jurusan</button>
+
+  <h2>Hasil</h2>
+  <p id="hasil"></p>
+
+  <script>
+    function tentukanJurusan() {
+      let siswaData = document.getElementById('siswaData').value;
+      let lines = siswaData.split('\n');
+      let data = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        let items = lines[i].split(',');
+        let nilaiIPA = parseInt(items[1]);
+        let nilaiIPS = parseInt(items[2]);
+        let nilaiBahasa = parseInt(items[3]);
+        data.push([nilaiIPA, nilaiIPS, nilaiBahasa]);
+      }
+
+      // Implementasi K-Medoids
+      // Di sini kamu bisa menggunakan algoritma K-Medoids untuk menentukan klaster
+      // Berdasarkan nilai IPA, IPS, dan Bahasa dari data siswa
+
+      // Contoh sederhana: menentukan klaster berdasarkan nilai tertinggi di setiap bidang
+      let hasilKlaster = [];
+      for (let i = 0; i < data.length; i++) {
+        let maxNilai = Math.max(...data[i]);
+        if (maxNilai === data[i][0]) {
+          hasilKlaster.push('Siswa ke-' + (i + 1) + ': Jurusan - IPA');
+        } else if (maxNilai === data[i][1]) {
+          hasilKlaster.push('Siswa ke-' + (i + 1) + ': Jurusan - IPS');
+        } else {
+          hasilKlaster.push('Siswa ke-' + (i + 1) + ': Jurusan - Bahasa');
+        }
+      }
+
+      let hasilElemen = document.getElementById('hasil');
+      hasilElemen.innerHTML = hasilKlaster.join('<br>');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+import cv2
+import numpy as np
+
+# Fungsi untuk mendeteksi titik pada citra
+def detect_corners(image):
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    corners = cv2.goodFeaturesToTrack(gray, 25, 0.01, 10)
+    corners = np.int0(corners)
+    for corner in corners:
+        x, y = corner.ravel()
+        cv2.circle(image, (x, y), 3, (0, 255, 0), -1)
+    return image
+
+# Fungsi untuk mendeteksi garis pada citra
+def detect_lines(image):
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    edges = cv2.Canny(gray, 50, 150, apertureSize=3)
+    lines = cv2.HoughLines(edges, 1, np.pi / 180, 200)
+    if lines is not None:
+        for rho, theta in lines[:, 0]:
+            a = np.cos(theta)
+            b = np.sin(theta)
+            x0 = a * rho
+            y0 = b * rho
+            x1 = int(x0 + 1000 * (-b))
+            y1 = int(y0 + 1000 * (a))
+            x2 = int(x0 - 1000 * (-b))
+            y2 = int(y0 - 1000 * (a))
+            cv2.line(image, (x1, y1), (x2, y2), (0, 0, 255), 2)
+    return image
+
+# Fungsi untuk mendeteksi tepi pada citra
+def detect_edges(image):
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    edges = cv2.Canny(gray, 100, 200)
+    return edges
+
+# Baca citra
+image = cv2.imread('image.jpg')
+
+# Deteksi titik
+corner_image = detect_corners(image.copy())
+
+# Deteksi garis
+line_image = detect_lines(image.copy())
+
+# Deteksi tepi
+edge_image = detect_edges(image.copy())
+
+# Tampilkan citra-citra hasil deteksi
+cv2.imshow('Original Image', image)
+cv2.imshow('Corner Detection', corner_image)
+cv2.imshow('Line Detection', line_image)
+cv2.imshow('Edge Detection', edge_image)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()

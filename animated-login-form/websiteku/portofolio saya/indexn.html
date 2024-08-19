@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Record and Convert Speech to Text and Back to Speech</title>
+</head>
+<body>
+<h1>Record and Convert Speech to Text and Back to Speech</h1>
+<button id="start-recording-button">Mulai Rekaman</button>
+<button id="stop-recording-button" disabled>Stop Rekaman</button>
+<button id="play-converted-text-button" disabled>Putar Teks yang Dikonversi</button>
+<p id="spoken-text"></p>
+
+<script>
+// Membuat variabel untuk menyimpan hasil rekaman
+let recordedChunks = [];
+
+// Event listener saat pengguna mengklik tombol "Mulai Rekaman"
+document.getElementById('start-recording-button').addEventListener('click', function() {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(function(stream) {
+        // Mengatur opsi untuk merekam audio
+        const mediaRecorder = new MediaRecorder(stream);
+
+        // Event listener saat media recorder mulai merekam
+        mediaRecorder.onstart = function() {
+            document.getElementById('start-recording-button').disabled = true;
+            document.getElementById('stop-recording-button').disabled = false;
+        };
+
+        // Event listener saat media recorder berhenti merekam
+        mediaRecorder.onstop = function() {
+            document.getElementById('start-recording-button').disabled = false;
+            document.getElementById('stop-recording-button').disabled = true;
+            document.getElementById('play-converted-text-button').disabled = false;
+        };
+
+        // Event listener saat media recorder mendapatkan data
+        mediaRecorder.ondataavailable = function(event) {
+            recordedChunks.push(event.data);
+        };
+
+        // Memulai merekam
+        mediaRecorder.start();
+
+        // Event listener saat pengguna mengklik tombol "Stop Rekaman"
+        document.getElementById('stop-recording-button').addEventListener('click', function() {
+            mediaRecorder.stop();
+        });
+    })
+    .catch(function(err) {
+        console.error('Gagal mendapatkan izin akses mikrofon:', err);
+    });
+});
+
+// Event listener saat pengguna mengklik tombol "Putar Teks yang Dikonversi"
+document.getElementById('play-converted-text-button').addEventListener('click', function() {
+    // Menggabungkan hasil rekaman menjadi satu blob
+    const blob = new Blob(recordedChunks, { type: 'audio/wav' });
+
+    // Membuat URL dari blob hasil rekaman
+    const audioURL = URL.createObjectURL(blob);
+
+    // Membuat elemen audio untuk memutar rekaman
+    const audioElement = new Audio(audioURL);
+
+    // Memainkan rekaman
+    audioElement.play();
+
+    // Mengonversi teks yang direkam menjadi suara menggunakan SpeechSynthesis API
+    const textToConvert = document.getElementById('spoken-text').textContent;
+    const speech = new SpeechSynthesisUtterance();
+    speech.lang = "id-ID"; // Set bahasa menjadi bahasa Indonesia, bisa disesuaikan dengan kebutuhan
+    speech.text = textToConvert;
+
+    // Memainkan suara yang telah dikonversi
+    window.speechSynthesis.speak(speech);
+});
+</script>
+</body>
+</html>

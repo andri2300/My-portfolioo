@@ -1,0 +1,1 @@
+const namaSaya = "dea afrizal";

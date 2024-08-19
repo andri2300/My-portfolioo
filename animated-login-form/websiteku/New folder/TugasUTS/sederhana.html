@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Prediksi Kanker Paru-paru</title>
+</head>
+<body>
+  <div>
+    <h1>Prediksi Kanker Paru-paru</h1>
+    <div>
+      <label for="smokingYears">Jumlah Tahun Merokok:</label>
+      <input type="number" id="smokingYears">
+      <button onclick="predict()">Prediksi</button>
+    </div>
+    <p id="prediction"></p>
+  </div>
+  <script>
+    // Data contoh: hubungan antara jumlah tahun merokok dan prediksi penyakit
+    const smokingYears = [1, 2, 3, 4, 5];
+    const diseasePrediction = [0.2, 0.4, 0.6, 0.8, 1.0];
+
+    // Fungsi untuk menghitung koefisien regresi
+    function regressionCoefficients(x, y) {
+      const xMean = x.reduce((acc, curr) => acc + curr, 0) / x.length;
+      const yMean = y.reduce((acc, curr) => acc + curr, 0) / y.length;
+
+      let numerator = 0;
+      let denominator = 0;
+
+      for (let i = 0; i < x.length; i++) {
+        numerator += (x[i] - xMean) * (y[i] - yMean);
+        denominator += Math.pow(x[i] - xMean, 2);
+      }
+
+      const slope = numerator / denominator;
+      const intercept = yMean - slope * xMean;
+
+      return { slope, intercept };
+    }
+
+    // Menghitung koefisien regresi
+    const coefficients = regressionCoefficients(smokingYears, diseasePrediction);
+    const slope = coefficients.slope;
+    const intercept = coefficients.intercept;
+
+    // Fungsi untuk memprediksi penyakit kanker paru-paru berdasarkan tahun merokok
+    function predictDisease(smokingYears) {
+      return slope * smokingYears + intercept;
+    }
+
+    // Fungsi untuk menampilkan prediksi pada halaman
+    function predict() {
+      const smokingYearsInput = document.getElementById('smokingYears');
+      const years = parseFloat(smokingYearsInput.value);
+
+      if (!isNaN(years)) {
+        const diseaseRisk = predictDisease(years);
+        const predictionText = `Jika merokok selama ${years} tahun, prediksi risiko penyakit adalah: ${diseaseRisk.toFixed(2)}`;
+        document.getElementById('prediction').innerText = predictionText;
+      } else {
+        document.getElementById('prediction').innerText = 'Masukkan jumlah tahun merokok yang valid.';
+      }
+    }
+  </script>
+</body>
+</html>

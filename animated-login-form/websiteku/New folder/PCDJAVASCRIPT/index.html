@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image Processing</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Image Processing</h1>
+    <input type="file" id="imgInput1" accept="image/*" class="image-input">
+    <input type="file" id="imgInput2" accept="image/*" class="image-input">
+    <div class="operations">
+      <h2>Operasi Aritmatika</h2>
+      <button onclick="addOperation('add')">Tambah</button>
+      <button onclick="addOperation('subtract')">Kurang</button>
+      <button onclick="addOperation('multiply')">Kali</button>
+      <button onclick="addOperation('divide')">Bagi</button>
+    </div>
+    <div class="operations">
+      <h2>Operasi Logika</h2>
+      <button onclick="addOperation('and')">AND</button>
+      <button onclick="addOperation('or')">OR</button>
+      <button onclick="addOperation('xor')">XOR</button>
+    </div>
+    <canvas id="outputCanvas"></canvas>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

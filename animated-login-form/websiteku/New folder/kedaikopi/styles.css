@@ -1,0 +1,42 @@
+/* Gaya CSS untuk halaman */
+/* Anda bisa menambahkan lebih banyak gaya di sini */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  header {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  nav ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  nav ul li {
+    display: inline;
+    margin-right: 20px;
+  }
+  
+  a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  section {
+    padding: 50px 20px;
+  }
+  
+  footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+  }
+  

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Operasi Pengolahan Citra</title>
+    <script>
+        var img1Loaded = false;
+        var img2Loaded = false;
+        var canvas1, canvas2;
+        var ctx1, ctx2;
+        var img1, img2;
+
+        function loadImage1(event) {
+            img1 = new Image();
+            img1.onload = function() {
+                canvas1 = document.getElementById('canvas1');
+                ctx1 = canvas1.getContext('2d');
+                canvas1.width = img1.width;
+                canvas1.height = img1.height;
+                ctx1.drawImage(img1, 0, 0);
+                img1Loaded = true;
+                checkImagesLoaded();
+            };
+            img1.src = URL.createObjectURL(event.target.files[0]);
+        }
+
+        function loadImage2(event) {
+            img2 = new Image();
+            img2.onload = function() {
+                canvas2 = document.getElementById('canvas2');
+                ctx2 = canvas2.getContext('2d');
+                canvas2.width = img2.width;
+                canvas2.height = img2.height;
+                ctx2.drawImage(img2, 0, 0);
+                img2Loaded = true;
+                checkImagesLoaded();
+            };
+            img2.src = URL.createObjectURL(event.target.files[0]);
+        }
+
+        function checkImagesLoaded() {
+            if (img1Loaded && img2Loaded) {
+                document.getElementById('multiply').disabled = false;
+                document.getElementById('divide').disabled = false;
+                document.getElementById('add').disabled = false;
+                document.getElementById('subtract').disabled = false;
+                // Enable other buttons once images are loaded
+                // ...
+            }
+        }
+
+        function performArithmeticOperation(operation) {
+            var resultCanvas = document.getElementById('resultCanvas');
+            var resultCtx = resultCanvas.getContext('2d');
+            resultCanvas.width = Math.max(img1.width, img2.width);
+            resultCanvas.height = Math.max(img1.height, img2.height);
+
+            resultCtx.clearRect(0, 0, resultCanvas.width, resultCanvas.height);
+            resultCtx.drawImage(img1, 0, 0);
+
+            var imgData1 = ctx1.getImageData(0, 0, canvas1.width, canvas1.height);
+            var data1 = imgData1.data;
+
+            var imgData2 = ctx2.getImageData(0, 0, canvas2.width, canvas2.height);
+            var data2 = imgData2.data;
+
+            var resultData = resultCtx.getImageData(0, 0, resultCanvas.width, resultCanvas.height);
+            var resultDataArray = resultData.data;
+
+            for (var i = 0; i < resultDataArray.length; i += 4) {
+                if (operation === 'multiply') {
+                    resultDataArray[i] = data1[i] * data2[i] / 255; // contoh perkalian
+                    resultDataArray[i + 1] = data1[i + 1] * data2[i + 1] / 255;
+                    resultDataArray[i + 2] = data1[i + 2] * data2[i + 2] / 255;
+                } else if (operation === 'divide') {
+                    resultDataArray[i] = data1[i] / (data2[i] / 255); // contoh pembagian
+                    resultDataArray[i + 1] = data1[i + 1] / (data2[i + 1] / 255);
+                    resultDataArray[i + 2] = data1[i + 2] / (data2[i + 2] / 255);
+                } else if (operation === 'add') {
+                    resultDataArray[i] = data1[i] + data2[i]; // contoh penambahan
+                    resultDataArray[i + 1] = data1[i + 1] + data2[i + 1];
+                    resultDataArray[i + 2] = data1[i + 2] + data2[i + 2];
+                } else if (operation === 'subtract') {
+                    resultDataArray[i] = data1[i] - data2[i]; // contoh pengurangan
+                    resultDataArray[i + 1] = data1[i + 1] - data2[i + 1];
+                    resultDataArray[i + 2] = data1[i + 2] - data2[i + 2];
+                }
+                resultDataArray[i] = Math.max(0, Math.min(resultDataArray[i], 255));
+                resultDataArray[i + 1] = Math.max(0, Math.min(resultDataArray[i + 1], 255));
+                resultDataArray[i + 2] = Math.max(0, Math.min(resultDataArray[i + 2], 255));
+            }
+            resultCtx.putImageData(resultData, 0, 0);
+        }
+
+        function performLogicOperation() {
+            // Implementasi operasi logika
+            // ...
+        }
+
+        function performRGBOperation() {
+            // Implementasi operasi RGB
+            // ...
+        }
+
+        function performGrayscaleOperation() {
+            // Implementasi operasi Grayscale
+            // ...
+        }
+
+        function performMinOperation() {
+            // Implementasi operasi minimal
+            // ...
+        }
+
+        function performMaxOperation() {
+            // Implementasi operasi maksimal
+            // ...
+        }
+
+        function performInverseRGBOperation() {
+            // Implementasi operasi inversi RGB
+            // ...
+        }
+
+        function performInverseGrayscaleOperation() {
+            // Implementasi operasi inversi Grayscale
+            // ...
+        }
+
+        function resetImages() {
+            img1Loaded = false;
+            img2Loaded = false;
+            img1 = null;
+            img2 = null;
+
+            document.getElementById('canvas1').getContext('2d').clearRect(0, 0, canvas1.width, canvas1.height);
+            document.getElementById('canvas2').getContext('2d').clearRect(0, 0, canvas2.width, canvas2.height);
+            document.getElementById('resultCanvas').getContext('2d').clearRect(0, 0, resultCanvas.width, resultCanvas.height);
+
+            document.getElementById('multiply').disabled = true;
+            document.getElementById('divide').disabled = true;
+            document.getElementById('add').disabled = true;
+            document.getElementById('subtract').disabled = true;
+            // Disable other buttons
+            // ...
+        }
+    </script>
+</head>
+<body>
+    <input type="file" accept="image/*" onchange="loadImage1(event)">
+    <input type="file" accept="image/*" onchange="loadImage2(event)">
+    <br>
+    <canvas id="canvas1" style="border:1px solid black;"></canvas>
+    <canvas id="canvas2" style="border:1px solid black;"></canvas>
+    <br>
+    <button onclick="performArithmeticOperation('multiply')" id="multiply" disabled>Perkalian</button>
+    <button onclick="performArithmeticOperation('divide')" id="divide" disabled>Pembagian</button>
+    <button onclick="performArithmeticOperation('add')" id="add" disabled>Penambahan</button>
+    <button onclick="performArithmeticOperation('subtract')" id="subtract" disabled>Pengurangan</button>
+    <br>
+    <canvas id="resultCanvas" style="border:1px solid black;"></canvas>
+    <br>
+    <button onclick="performRGBOperation()">RGB</button>
+    <button onclick="performGrayscaleOperation()">Grayscale</button>
+    <button onclick="performMinOperation()">Minimal</button>
+    <button onclick="performMaxOperation()">Maksimal</button>
+    <button onclick="performInverseRGBOperation()">Inverse RGB</button>
+    <button onclick="performInverseGrayscaleOperation()">Inverse Grayscale</button>
+    <button onclick="resetImages()">Reset</button>
+</body>
+</html>

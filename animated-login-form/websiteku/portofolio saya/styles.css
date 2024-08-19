@@ -1,0 +1,37 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  nav {
+    background-color: #333;
+    padding: 10px 0;
+  }
+  
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+  
+  li {
+    display: inline-block;
+    margin-right: 20px;
+  }
+  
+  a {
+    color: #fff;
+    text-decoration: none;
+    position: relative;
+  }
+  
+  .neon-line {
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    background-color: #00ff00; /* Warna neon */
+    bottom: -2px;
+    transition: width 0.3s ease;
+  }
+  
